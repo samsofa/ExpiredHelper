@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">Expired Helper</string>
+  <string name="fake">fgvjhscfmififovimcmvfcjhFNWJFNSGHLGHLSKGJSLGHSLgfjaghraghalfhaghgl;shgakhgl;asgjhadlghja;gfmcsviovstiovhgmcascamhriomjasts;,ajlghsl;fmshtlvsmsltvatmlcsarv,sacclsffkgjkldSgnkflgjldgjSL:Gjdgljjeropjgds;gmSL:G</string>
+  <string name="empty_view_title_text">"You have no items "</string>
+  <string name="empty_view_subtitle_text">Press add button to add itms</string>
+  <string name="toolbar_title_expire_helper">Expire Organizer</string>
+</resources>
