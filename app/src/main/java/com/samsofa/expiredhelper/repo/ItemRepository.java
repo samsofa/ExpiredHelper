@@ -12,7 +12,7 @@ public class ItemRepository {
 
   private ItemDao itemDao;
 
-  private LiveData<List<Item>> allItem;
+  private LiveData<List<Item>> allItems;
 
   public ItemRepository(Application application) {
 
@@ -20,18 +20,26 @@ public class ItemRepository {
 
     itemDao = itemDatabase.itemDao();
 
-    allItem = itemDao.getAllItems();
+    allItems = itemDao.getAllItems();
   }
 
   public void insert(Item item){
-    
+
+    itemDao.insert(item);
   }
 
   public void update(Item item){
+
+    itemDao.update(item);
     
   }
 
   public void delete(Item item){
 
+    itemDao.delete(item);
+  }
+
+  public LiveData<List<Item>> getAllItems(){
+    return allItems;
   }
 }
