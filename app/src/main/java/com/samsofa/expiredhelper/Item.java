@@ -10,17 +10,17 @@ public class Item {
   private int id;
 
 
-  private String Code;
+  private final String code;
 
 
-  private String supplier;
+  private final String supplier;
 
 
-  private long expire_date;
+  private final long expire_date;
 
 
   public Item(String code, String supplier, long expire_date) {
-    Code = code;
+    this.code = code;
     this.supplier = supplier;
     this.expire_date = expire_date;
   }
@@ -30,7 +30,7 @@ public class Item {
   }
 
   public String getCode() {
-    return Code;
+    return code;
   }
 
   public String getSupplier() {
