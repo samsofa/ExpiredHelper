@@ -1,7 +1,8 @@
-package com.samsofa.expiredhelper;
+package com.samsofa.expiredhelper.ui;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import com.samsofa.expiredhelper.R;
 
 public class MainActivity extends AppCompatActivity {
 

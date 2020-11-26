@@ -39,7 +39,16 @@ public class ItemRepository {
     itemDao.delete(item);
   }
 
+  public void deleteAll(){
+    itemDao.deleteAll();
+  }
+
   public LiveData<List<Item>> getAllItems(){
     return allItems;
   }
+
+  public LiveData<List<Item>> queryBySupplier(String supplier){
+    return itemDao.queryBySupplier(supplier);
+  }
+
 }
