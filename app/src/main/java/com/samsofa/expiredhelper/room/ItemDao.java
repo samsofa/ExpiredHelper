@@ -10,7 +10,7 @@ import com.samsofa.expiredhelper.models.Item;
 import java.util.List;
 
 @Dao
-public interface ItemDao  {
+public interface ItemDao {
 
   @Insert
   void insert(Item item);
@@ -27,8 +27,8 @@ public interface ItemDao  {
   @Query("SELECT * FROM item_table ORDER BY expire_date")
   LiveData<List<Item>> getAllItems();
 
-  @Query("SELECT * FROM item_table where supplier LIKE '% :supplier' ORDER BY expire_date")
+  @Query("SELECT * FROM item_table where supplier = :supplier ORDER BY expire_date")
   LiveData<List<Item>> queryBySupplier(String supplier);
-  
-   
+
+
 }

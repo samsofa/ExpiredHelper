@@ -3,9 +3,11 @@ package com.samsofa.expiredhelper.models;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.util.Objects;
 
 @Entity(tableName = "item_table")
 public class Item {
+
 
   @PrimaryKey(autoGenerate = true)
   private int id;
@@ -14,16 +16,16 @@ public class Item {
   private final String code;
 
 
-  private final String supplier; 
+  private final String supplier;
 
   @ColumnInfo(name = "expire_date")
   private final long expireDate;
 
 
-  public Item(String code, String supplier, long expire_date) {
+  public Item(String code, String supplier, long expireDate) {
     this.code = code;
     this.supplier = supplier;
-    this.expireDate = expire_date;
+    this.expireDate = expireDate;
   }
 
   public int getId() {
@@ -41,4 +43,25 @@ public class Item {
   public long getExpireDate() {
     return expireDate;
   }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Item)) {
+      return false;
+    }
+    Item item = (Item) o;
+    return getId() == item.getId() &&
+        getExpireDate() == item.getExpireDate() &&
+        getCode().equals(item.getCode()) &&
+        Objects.equals(getSupplier(), item.getSupplier());
+  }
+
+
 }

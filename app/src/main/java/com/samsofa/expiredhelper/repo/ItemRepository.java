@@ -1,7 +1,7 @@
 package com.samsofa.expiredhelper.repo;
 
 import android.app.Application;
-import android.provider.ContactsContract.CommonDataKinds.Note;
+import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.room.ItemDao;
@@ -14,6 +14,7 @@ public class ItemRepository {
 
   private LiveData<List<Item>> allItems;
 
+
   public ItemRepository(Application application) {
 
     ItemDatabase itemDatabase = ItemDatabase.getInstance(application);
@@ -21,34 +22,96 @@ public class ItemRepository {
     itemDao = itemDatabase.itemDao();
 
     allItems = itemDao.getAllItems();
+
+
   }
 
-  public void insert(Item item){
+  public void insert(Item item) {
 
-    itemDao.insert(item);
+    new InsertNoteAsyncTask(itemDao).execute(item);
   }
 
-  public void update(Item item){
-
-    itemDao.update(item);
-    
+  public void update(Item item) {
+    new UpdateNoteAsyncTask(itemDao).execute(item);
   }
 
-  public void delete(Item item){
+  public void delete(Item item) {
 
-    itemDao.delete(item);
+    new UpdateNoteAsyncTask(itemDao).execute(item);
   }
 
-  public void deleteAll(){
-    itemDao.deleteAll();
+  public void deleteAll() {
+
+    new DeleteAllNoteAsyncTask(itemDao).execute();
   }
 
-  public LiveData<List<Item>> getAllItems(){
+
+  public LiveData<List<Item>> getAllItems() {
     return allItems;
   }
 
-  public LiveData<List<Item>> queryBySupplier(String supplier){
-    return itemDao.queryBySupplier(supplier);
+
+  private static class InsertNoteAsyncTask extends AsyncTask<Item, Void, Void> {
+
+    private ItemDao itemDao;
+
+    private InsertNoteAsyncTask(ItemDao itemDao) {
+      this.itemDao = itemDao;
+    }
+
+    @Override
+    protected Void doInBackground(Item... items) {
+      itemDao.insert(items[0]);
+      return null;
+    }
   }
+
+  private static class UpdateNoteAsyncTask extends AsyncTask<Item, Void, Void> {
+
+    private ItemDao itemDao;
+
+    private UpdateNoteAsyncTask(ItemDao itemDao) {
+      this.itemDao = itemDao;
+    }
+
+    @Override
+    protected Void doInBackground(Item... items) {
+      itemDao.update(items[0]);
+      return null;
+    }
+  }
+
+  private static class DeleteNoteAsyncTask extends AsyncTask<Item, Void, Void> {
+
+    private ItemDao itemDao;
+
+    private DeleteNoteAsyncTask(ItemDao itemDao) {
+      this.itemDao = itemDao;
+    }
+
+    @Override
+    protected Void doInBackground(Item... items) {
+      itemDao.delete(items[0]);
+      return null;
+    }
+  }
+
+  private static class DeleteAllNoteAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    private ItemDao itemDao;
+
+
+    private DeleteAllNoteAsyncTask(ItemDao itemDao) {
+      this.itemDao = itemDao;
+    }
+
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      itemDao.deleteAll();
+      return null;
+    }
+  }
+
 
 }

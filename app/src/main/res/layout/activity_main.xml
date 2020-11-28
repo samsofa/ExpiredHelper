@@ -39,8 +39,8 @@
     </com.google.android.material.appbar.CollapsingToolbarLayout>
   </com.google.android.material.appbar.AppBarLayout>
 
-  <include layout="@layout/scroll_view_item" />
 
+  <include layout="@layout/scroll_view_item" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/fab"

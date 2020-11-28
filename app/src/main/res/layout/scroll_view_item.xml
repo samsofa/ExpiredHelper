@@ -48,13 +48,14 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/list"
+      android:id="@+id/main_recylerView"
       android:nestedScrollingEnabled="true"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:padding="@dimen/activity_margin"
       android:drawable="?android:attr/selectableItemBackgroundBorderless"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      tools:listitem="@layout/item_row"
       tools:targetApi="lollipop" />
   </RelativeLayout>
 </androidx.core.widget.NestedScrollView>
