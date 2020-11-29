@@ -1,12 +1,14 @@
 package com.samsofa.expiredhelper.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.textfield.TextInputLayout;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
@@ -14,9 +16,10 @@ import com.samsofa.expiredhelper.viewModels.ItemViewModel;
 
 public class AddEditItemActivity extends AppCompatActivity {
 
+  TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
   EditText codeEditText, supplierEditText, expireDateEditText;
 
-  String code, StringExpire, supplier;
+  String codeString, StringExpire, supplierString;
 
   ItemViewModel itemViewModel;
 
@@ -25,9 +28,7 @@ public class AddEditItemActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_edit_item);
 
-    codeEditText = findViewById(R.id.et_code_name);
-    supplierEditText = findViewById(R.id.et_supplier);
-    expireDateEditText = findViewById(R.id.et_expire);
+    viewInit();
 
     itemViewModel = new ViewModelProvider(this,
         ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
@@ -49,23 +50,49 @@ public class AddEditItemActivity extends AppCompatActivity {
         saveItem();
         return true;
 
+      case R.id.action_delete:
+
+        return true;
+
       default:
         return super.onOptionsItemSelected(item);
     }
 
   }
 
+
   private void saveItem() {
 
     getTextFromEditText();
-    Item newItem = new Item(code, supplier, Long.parseLong(StringExpire));
+    Item newItem = new Item(codeString, supplierString, Long.parseLong(StringExpire));
     itemViewModel.insert(newItem);
   }
 
 
   private void getTextFromEditText() {
-    code = codeEditText.getText().toString();
-    supplier = supplierEditText.getText().toString();
+    codeString = codeEditText.getText().toString();
+    supplierString = supplierEditText.getText().toString();
     StringExpire = expireDateEditText.getText().toString();
+
+  }
+
+  private void viewInit() {
+    //EditText
+    codeEditText = findViewById(R.id.et_code_name);
+    supplierEditText = findViewById(R.id.et_supplier);
+    expireDateEditText = findViewById(R.id.et_expire);
+    //textInputLayout
+    codeTextInputLayout = findViewById(R.id.code_textInputLayout);
+    supplierTextInputLayout = findViewById(R.id.supplier_textInputLayout);
+    expireTextInputLayout = findViewById(R.id.expire_textInputLayout);
+
+  }
+
+  private void validation() {
+    if (codeString.length() != 6) {
+      codeTextInputLayout.setError("fill code text with 6 numbers");
+      return;
+    }
+
   }
 }

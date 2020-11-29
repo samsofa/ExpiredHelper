@@ -2,6 +2,7 @@ package com.samsofa.expiredhelper.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -10,11 +11,13 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.samsofa.expiredhelper.R;
+import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
 
 public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
 
+  private RecyclerViewClickListener listener;
   private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new ItemCallback<Item>() {
     @Override
     public boolean areItemsTheSame(@NonNull Item oldItem, @NonNull Item newItem) {
@@ -29,8 +32,9 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
     }
   };
 
-  public ItemAdapter() {
+  public ItemAdapter(RecyclerViewClickListener listener) {
     super(DIFF_CALLBACK);
+    this.listener = listener;
   }
 
   @NonNull
@@ -64,6 +68,15 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
       codeNameTextView = itemView.findViewById(R.id.txv_item_name);
       codeDateTextView = itemView.findViewById(R.id.txv_item_date);
       codeSupplierTextView = itemView.findViewById(R.id.txv_item_supplier);
+
+      itemView.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          listener.onItemClick(getAdapterPosition());
+        }
+      });
+
     }
   }
+
 }

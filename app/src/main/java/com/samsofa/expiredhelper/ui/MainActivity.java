@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,20 +13,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.adapters.ItemAdapter;
+import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
   private ItemViewModel itemViewModel;
+  private List<Item> displayItems;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    ItemAdapter adapter = new ItemAdapter();
+    displayItems = new ArrayList<>();
+    ItemAdapter adapter = new ItemAdapter(this);
     RecyclerView recyclerView = findViewById(R.id.main_recylerView);
     recyclerView
         .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onChanged(List<Item> items) {
         adapter.submitList(items);
+        displayItems.addAll(items);
       }
     });
 
@@ -50,5 +56,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
       }
     });
+  }
+
+
+  @Override
+  public void onItemClick(int position) {
+    Toast.makeText(this, "position " + position, Toast.LENGTH_SHORT).show();
   }
 }

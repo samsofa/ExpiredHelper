@@ -7,19 +7,27 @@
   android:layout_margin="8dp"
   tools:context=".ui.AddEditItemActivity">
 
+  <TextView
+    android:id="@+id/textView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="TextView"
+    tools:layout_editor_absoluteX="69dp"
+    tools:layout_editor_absoluteY="348dp" />
+
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/code_textInputLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <EditText
       android:id="@+id/et_code_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:hint="code" />
+      android:hint="code"
+      android:inputType="number" />
   </com.google.android.material.textfield.TextInputLayout>
 
   <com.google.android.material.textfield.TextInputLayout
