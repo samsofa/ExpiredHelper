@@ -7,60 +7,104 @@
   android:layout_margin="8dp"
   tools:context=".ui.AddEditItemActivity">
 
-  <TextView
-    android:id="@+id/textView2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="TextView"
-    tools:layout_editor_absoluteX="69dp"
-    tools:layout_editor_absoluteY="348dp" />
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/code_textInputLayout"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/guideline"
     app:layout_constraintTop_toTopOf="parent">
 
     <EditText
       android:id="@+id/et_code_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@drawable/round_corner"
+      android:maxLength="6"
+      android:maxLines="1"
       android:hint="code"
       android:inputType="number" />
   </com.google.android.material.textfield.TextInputLayout>
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/supplier_textInputLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/code_textInputLayout">
 
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/et_supplier"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="supplier" />
-  </com.google.android.material.textfield.TextInputLayout>
+  <Spinner
+    android:id="@+id/spinner_supplier"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="60dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.043"
+    app:layout_constraintStart_toStartOf="@+id/guideline"
+    app:layout_constraintTop_toBottomOf="@+id/code_textInputLayout" />
 
   <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/expire_textInputLayout"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="32dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/supplier_textInputLayout">
+    app:layout_constraintStart_toStartOf="@+id/guideline"
+    app:layout_constraintTop_toBottomOf="@+id/spinner_supplier">
 
     <com.google.android.material.textfield.TextInputEditText
       android:id="@+id/et_expire"
       android:layout_width="match_parent"
+      android:background="@drawable/round_corner"
       android:layout_height="wrap_content"
+      android:maxLines="1"
       android:hint="expire date" />
   </com.google.android.material.textfield.TextInputLayout>
 
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_end="273dp" />
+
+  <TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:text="Code"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    app:layout_constraintBottom_toBottomOf="@+id/code_textInputLayout"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/textView4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="64dp"
+    android:text="Supplier"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    app:layout_constraintBottom_toBottomOf="@+id/supplier_textInputLayout"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+  <TextView
+    android:id="@+id/textView5"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="44dp"
+
+    android:text="Date"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    app:layout_constraintBottom_toBottomOf="@+id/expire_textInputLayout"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+  <androidx.constraintlayout.widget.Barrier
+    android:id="@+id/barrier4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:barrierDirection="left"
+    app:constraint_referenced_ids="textView,textView4,textView5"
+    tools:layout_editor_absoluteX="395dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

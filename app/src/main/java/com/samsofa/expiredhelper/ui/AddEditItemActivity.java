@@ -4,7 +4,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,9 +24,12 @@ public class AddEditItemActivity extends AppCompatActivity {
   TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
   EditText codeEditText, supplierEditText, expireDateEditText;
 
-  String codeString, StringExpire, supplierString;
+  String codeString, StringExpire;
 
   ItemViewModel itemViewModel;
+
+  private Spinner mSupplierSpinner;
+  private String mSupplier = "unknown supplier";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,7 @@ public class AddEditItemActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_edit_item);
 
     viewInit();
+    setupSpinner();
 
     itemViewModel = new ViewModelProvider(this,
         ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
@@ -64,14 +73,18 @@ public class AddEditItemActivity extends AppCompatActivity {
   private void saveItem() {
 
     getTextFromEditText();
-    Item newItem = new Item(codeString, supplierString, Long.parseLong(StringExpire));
-    itemViewModel.insert(newItem);
+
+    if (validation(codeTextInputLayout, codeString)) {
+      Item newItem = new Item(codeString, mSupplier, Long.parseLong(StringExpire));
+      itemViewModel.insert(newItem);
+      finish();
+      //todo  AlertDialog to ask would you finish layout or contonui adding more items
+    }
   }
 
 
   private void getTextFromEditText() {
     codeString = codeEditText.getText().toString();
-    supplierString = supplierEditText.getText().toString();
     StringExpire = expireDateEditText.getText().toString();
 
   }
@@ -79,7 +92,7 @@ public class AddEditItemActivity extends AppCompatActivity {
   private void viewInit() {
     //EditText
     codeEditText = findViewById(R.id.et_code_name);
-    supplierEditText = findViewById(R.id.et_supplier);
+    mSupplierSpinner = findViewById(R.id.spinner_supplier);
     expireDateEditText = findViewById(R.id.et_expire);
     //textInputLayout
     codeTextInputLayout = findViewById(R.id.code_textInputLayout);
@@ -88,11 +101,53 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   }
 
-  private void validation() {
-    if (codeString.length() != 6) {
-      codeTextInputLayout.setError("fill code text with 6 numbers");
-      return;
+  private boolean validation(TextInputLayout inputLayout, String textString) {
+    if (textString.length() != 6) {
+      inputLayout.setError("fill code text with 6 numbers");
+      return false;
+    } else {
+      return true;
     }
+
+  }
+
+  private void setupSpinner() {
+    ArrayAdapter supplierSpinnerAdapter = ArrayAdapter
+        .createFromResource(this, R.array.array_supplier_option,
+            android.R.layout.simple_spinner_item);
+
+    // Specify dropdown layout style - simple list view with 1 item per line
+    supplierSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+    // Apply the adapter to the spinner
+    mSupplierSpinner.setAdapter(supplierSpinnerAdapter);
+
+    // Set the integer mSelected to the constant values
+    mSupplierSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selection = (String) parent.getItemAtPosition(position);
+        if (!TextUtils.isEmpty(selection)) {
+          if (selection.equals(getString(R.string.supplier_idf))) {
+            mSupplier = Constants.SUPPLIER_IDF; // idf
+          } else if (selection.equals(getString(R.string.supplier_ritter))) {
+            mSupplier = Constants.SUPPLIER_RITTER; // ritter
+          } else if (selection.equals(getString(R.string.supplier_ouvo))) {
+            mSupplier = Constants.SUPPLIER_OUVO; // ouvo
+          } else if (selection.equals(getString(R.string.supplier_ayman))) {
+            mSupplier = Constants.SUPPLIER_AYMAN; //ayman
+          } else {
+            mSupplier = Constants.SUPPLIER_UNKNOWN; // Unknown
+          }
+        }
+
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+        mSupplier = "" + R.string.supplier_unknown;
+      }
+    });
 
   }
 }

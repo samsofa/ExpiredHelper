@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -16,20 +17,21 @@ import com.samsofa.expiredhelper.adapters.ItemAdapter;
 import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
   private ItemViewModel itemViewModel;
-  private List<Item> displayItems;
+
+  private RelativeLayout emptyView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    displayItems = new ArrayList<>();
+    emptyView = findViewById(R.id.empty_view);
+
     ItemAdapter adapter = new ItemAdapter(this);
     RecyclerView recyclerView = findViewById(R.id.main_recylerView);
     recyclerView
@@ -44,7 +46,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
       @Override
       public void onChanged(List<Item> items) {
         adapter.submitList(items);
-        displayItems.addAll(items);
+
+        if (adapter.getCurrentList().size() > 0) {
+          emptyView.setVisibility(View.GONE);
+        }
       }
     });
 
@@ -63,4 +68,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   public void onItemClick(int position) {
     Toast.makeText(this, "position " + position, Toast.LENGTH_SHORT).show();
   }
+
+
 }
