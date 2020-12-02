@@ -8,7 +8,6 @@ import java.util.Objects;
 @Entity(tableName = "item_table")
 public class Item {
 
-
   @PrimaryKey(autoGenerate = true)
   private int id;
 

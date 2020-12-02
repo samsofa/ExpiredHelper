@@ -3,6 +3,7 @@ package com.samsofa.expiredhelper.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.models.Item;
@@ -21,6 +23,8 @@ import com.samsofa.expiredhelper.viewModels.ItemViewModel;
 
 
 public class AddEditItemActivity extends AppCompatActivity {
+
+  private static final String TAG = "AddEditItemActivity";
 
   TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
   EditText codeEditText, supplierEditText, expireDateEditText;
@@ -40,11 +44,20 @@ public class AddEditItemActivity extends AppCompatActivity {
     viewInit();
     setupSpinner();
     Intent intent = getIntent();
+
     if (intent.hasExtra("id")) {
+      Log.i(TAG, "onCreate: has id");
+      String code = intent.getExtras().getString("code");
+      mSupplier = intent.getExtras().getString("supplier");
+      String expireDate = intent.getExtras().getString("expired_date");
+
+      codeEditText.setText(code);
+      addValueToSpinner();
+      expireDateEditText.setText(expireDate);
 
     }
     itemViewModel = new ViewModelProvider(this,
-        ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
+        AndroidViewModelFactory.getInstance(this.getApplication()))
         .get(ItemViewModel.class);
 
 
@@ -159,5 +172,28 @@ public class AddEditItemActivity extends AppCompatActivity {
       }
     });
 
+  }
+
+  private void addValueToSpinner() {
+    switch (mSupplier) {
+      case Constants.SUPPLIER_IDF:
+        mSupplierSpinner.setSelection(1);
+        break;
+      case Constants.SUPPLIER_RITTER:
+        mSupplierSpinner.setSelection(2);
+        break;
+      case Constants.SUPPLIER_OUVO:
+        mSupplierSpinner.setSelection(3);
+        break;
+      case Constants.SUPPLIER_AYMAN:
+        mSupplierSpinner.setSelection(4);
+        break;
+      case Constants.SUPPLIER_SAMEH:
+        mSupplierSpinner.setSelection(5);
+        break;
+      default:
+        mSupplierSpinner.setSelection(0);
+        break;
+    }
   }
 }

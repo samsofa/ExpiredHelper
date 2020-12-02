@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     intent.putExtra("supplier", currentItem.getSupplier());
     intent.putExtra("expired_date", currentItem.getExpireDate());
     intent.putExtra("id", currentItem.getId());
+
     startActivity(intent);
   }
 
