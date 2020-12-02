@@ -10,5 +10,7 @@ public class Constants {
   public static final String SUPPLIER_RITTER = "RITTER";
   public static final String SUPPLIER_OUVO = "OUVO";
   public static final String SUPPLIER_AYMAN = "AYMAN";
+  public static final String SUPPLIER_SAMEH = "SAMEH";
+
 
 }

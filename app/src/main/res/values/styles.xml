@@ -11,5 +11,13 @@
     <item name="android:textSize">32sp</item>
   </style>
 
-  <style name="Theme.Edit" parent="Theme.MaterialComponents.DayNight.DarkActionBar" />
+  <style name="Theme.Edit" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <item name="colorButtonNormal">#ffc107</item>
+    <item name="colorPrimary">#ff9100</item>
+    <item name="colorAccent">#ffc107</item>
+    <item name="colorPrimaryDark">#d84315</item>
+
+
+  </style>
+
 </resources>

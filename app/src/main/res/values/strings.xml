@@ -1,6 +1,5 @@
 <resources>
   <string name="app_name">Expired Helper</string>
-  <string name="fake">fgvjhscfmififovimcmvfcjhFNWJFNSGHLGHLSKGJSLGHSLgfjaghraghalfhaghgl;shgakhgl;asgjhadlghja;gfmcsviovstiovhgmcascamhriomjasts;,ajlghsl;fmshtlvsmsltvatmlcsarv,sacclsffkgjkldSgnkflgjldgjSL:Gjdgljjeropjgds;gmSL:G</string>
   <string name="empty_view_title_text">"You have no items "</string>
   <string name="empty_view_subtitle_text">Press add button to add itms</string>
   <string name="toolbar_title_expire_helper">Expire Organizer</string>
@@ -9,6 +8,7 @@
   <string name="supplier_ritter" translatable="false">RITTER 420</string>
   <string name="supplier_ouvo" translatable="false">Ouvo 650</string>
   <string name="supplier_ayman" translatable="false">ayman 905</string>
+  <string name="supplier_sameh" translatable="false">sameh 1001</string>
   <string name="supplier_unknown">Unknown supplier</string>
 
 </resources>

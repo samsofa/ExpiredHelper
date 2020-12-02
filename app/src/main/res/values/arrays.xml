@@ -6,5 +6,6 @@
     <item>@string/supplier_ritter</item>
     <item>@string/supplier_ouvo</item>
     <item>@string/supplier_ayman</item>
+    <item>@string/supplier_sameh</item>
   </string-array>
 </resources>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
 
   private RelativeLayout emptyView;
 
+  private ItemAdapter adapter;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
 
     emptyView = findViewById(R.id.empty_view);
 
-    ItemAdapter adapter = new ItemAdapter(this);
+    adapter = new ItemAdapter(this);
     RecyclerView recyclerView = findViewById(R.id.main_recylerView);
     recyclerView
         .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -63,10 +64,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     });
   }
 
-
   @Override
   public void onItemClick(int position) {
-    Toast.makeText(this, "position " + position, Toast.LENGTH_SHORT).show();
+    Item currentItem = adapter.getItemsAt(position);
+    Intent intent = new Intent(MainActivity.this, AddEditItemActivity.class);
+
+    intent.putExtra("code", currentItem.getCode());
+    intent.putExtra("supplier", currentItem.getSupplier());
+    intent.putExtra("expired_date", currentItem.getExpireDate());
+    intent.putExtra("id", currentItem.getId());
+    startActivity(intent);
   }
 
 

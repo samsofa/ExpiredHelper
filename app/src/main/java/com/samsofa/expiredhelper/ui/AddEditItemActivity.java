@@ -1,5 +1,6 @@
 package com.samsofa.expiredhelper.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -38,7 +39,10 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     viewInit();
     setupSpinner();
+    Intent intent = getIntent();
+    if (intent.hasExtra("id")) {
 
+    }
     itemViewModel = new ViewModelProvider(this,
         ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
         .get(ItemViewModel.class);
@@ -80,6 +84,10 @@ public class AddEditItemActivity extends AppCompatActivity {
       finish();
       //todo  AlertDialog to ask would you finish layout or contonui adding more items
     }
+  }
+
+  private void delete() {
+
   }
 
 
@@ -135,6 +143,8 @@ public class AddEditItemActivity extends AppCompatActivity {
             mSupplier = Constants.SUPPLIER_OUVO; // ouvo
           } else if (selection.equals(getString(R.string.supplier_ayman))) {
             mSupplier = Constants.SUPPLIER_AYMAN; //ayman
+          } else if (selection.equals(getString(R.string.supplier_sameh))) {
+            mSupplier = Constants.SUPPLIER_SAMEH; //sameh
           } else {
             mSupplier = Constants.SUPPLIER_UNKNOWN; // Unknown
           }
