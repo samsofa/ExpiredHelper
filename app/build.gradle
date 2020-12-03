@@ -56,4 +56,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     //CardView
     implementation "androidx.cardview:cardview:1.0.0"
+
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+
 }

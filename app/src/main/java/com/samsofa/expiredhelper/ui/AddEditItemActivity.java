@@ -27,9 +27,9 @@ public class AddEditItemActivity extends AppCompatActivity {
   private static final String TAG = "AddEditItemActivity";
 
   TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
-  EditText codeEditText, supplierEditText, expireDateEditText;
+  EditText codeEditText, expireDateEditText;
 
-  String codeString, StringExpire;
+  String codeString, stringExpire;
 
   ItemViewModel itemViewModel;
 
@@ -47,13 +47,13 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     if (intent.hasExtra("id")) {
       Log.i(TAG, "onCreate: has id");
-      String code = intent.getExtras().getString("code");
+      codeString = intent.getExtras().getString("code");
       mSupplier = intent.getExtras().getString("supplier");
-      String expireDate = intent.getExtras().getString("expired_date");
+      stringExpire = intent.getExtras().getString("expired_date");
 
-      codeEditText.setText(code);
+      codeEditText.setText(codeString);
       addValueToSpinner();
-      expireDateEditText.setText(expireDate);
+      expireDateEditText.setText(stringExpire);
 
     }
     itemViewModel = new ViewModelProvider(this,
@@ -77,7 +77,7 @@ public class AddEditItemActivity extends AppCompatActivity {
         return true;
 
       case R.id.action_delete:
-
+        delete();
         return true;
 
       default:
@@ -92,7 +92,7 @@ public class AddEditItemActivity extends AppCompatActivity {
     getTextFromEditText();
 
     if (validation(codeTextInputLayout, codeString)) {
-      Item newItem = new Item(codeString, mSupplier, Long.parseLong(StringExpire));
+      Item newItem = new Item(codeString, mSupplier, Long.parseLong(stringExpire));
       itemViewModel.insert(newItem);
       finish();
       //todo  AlertDialog to ask would you finish layout or contonui adding more items
@@ -100,13 +100,21 @@ public class AddEditItemActivity extends AppCompatActivity {
   }
 
   private void delete() {
+    Log.i(TAG, "delete: delete");
+
+    getTextFromEditText();
+    if (validation(codeTextInputLayout, codeString)) {
+      Item selectedItem = new Item(codeString, mSupplier, Long.parseLong(stringExpire));
+      itemViewModel.delete(selectedItem);
+      finish();
+    }
 
   }
 
 
   private void getTextFromEditText() {
     codeString = codeEditText.getText().toString();
-    StringExpire = expireDateEditText.getText().toString();
+    stringExpire = expireDateEditText.getText().toString();
 
   }
 

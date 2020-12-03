@@ -37,7 +37,7 @@ public class ItemRepository {
 
   public void delete(Item item) {
 
-    new UpdateNoteAsyncTask(itemDao).execute(item);
+   new DeleteNoteAsyncTask(itemDao).execute(item);
   }
 
   public void deleteAll() {
@@ -112,6 +112,5 @@ public class ItemRepository {
       return null;
     }
   }
-
 
 }

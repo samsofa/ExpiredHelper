@@ -52,9 +52,11 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
     holder.codeNameTextView.setText(currentItem.getCode());
     holder.codeSupplierTextView.setText(currentItem.getSupplier());
     holder.codeDateTextView.setText(String.valueOf(currentItem.getExpireDate()));
+
+
   }
 
-  public Item getItemsAt(int position) {
+  public Item getItemAt(int position) {
     return getItem(position);
   }
 
