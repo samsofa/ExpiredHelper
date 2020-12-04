@@ -16,7 +16,10 @@
     <item name="colorPrimary">#ff9100</item>
     <item name="colorAccent">#ffc107</item>
     <item name="colorPrimaryDark">#d84315</item>
+  </style>
 
+  <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
+    <item name="android:src">@drawable/ic_more</item>
 
   </style>
 

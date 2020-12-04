@@ -1,11 +1,15 @@
 package com.samsofa.expiredhelper.adapters;
 
+import android.app.Application;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
@@ -18,6 +22,8 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
 
   private RecyclerViewClickListener listener;
+
+  private Context context;
   private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new ItemCallback<Item>() {
     @Override
     public boolean areItemsTheSame(@NonNull Item oldItem, @NonNull Item newItem) {
@@ -32,9 +38,10 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
     }
   };
 
-  public ItemAdapter(RecyclerViewClickListener listener) {
+  public ItemAdapter(RecyclerViewClickListener listener, Context context) {
     super(DIFF_CALLBACK);
     this.listener = listener;
+    this.context = context;
   }
 
   @NonNull
@@ -49,6 +56,11 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
   public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
 
     Item currentItem = getItem(position);
+
+    holder.container
+        .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
+    holder.codeNameTextView
+        .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
     holder.codeNameTextView.setText(currentItem.getCode());
     holder.codeSupplierTextView.setText(currentItem.getSupplier());
     holder.codeDateTextView.setText(String.valueOf(currentItem.getExpireDate()));
@@ -64,9 +76,11 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
     TextView codeNameTextView, codeDateTextView, codeSupplierTextView;
 
+    CardView container;
     public ItemHolder(@NonNull View itemView) {
       super(itemView);
 
+      container = itemView.findViewById(R.id.container);
       codeNameTextView = itemView.findViewById(R.id.txv_item_name);
       codeDateTextView = itemView.findViewById(R.id.txv_item_date);
       codeSupplierTextView = itemView.findViewById(R.id.txv_item_supplier);

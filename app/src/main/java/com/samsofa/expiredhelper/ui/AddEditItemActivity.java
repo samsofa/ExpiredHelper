@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,21 +46,10 @@ public class AddEditItemActivity extends AppCompatActivity {
     setupSpinner();
     Intent intent = getIntent();
 
-    if (intent.hasExtra("id")) {
-      Log.i(TAG, "onCreate: has id");
-      codeString = intent.getExtras().getString("code");
-      mSupplier = intent.getExtras().getString("supplier");
-      stringExpire = intent.getExtras().getString("expired_date");
 
-      codeEditText.setText(codeString);
-      addValueToSpinner();
-      expireDateEditText.setText(stringExpire);
-
-    }
     itemViewModel = new ViewModelProvider(this,
         AndroidViewModelFactory.getInstance(this.getApplication()))
         .get(ItemViewModel.class);
-
 
   }
 

@@ -1,7 +1,7 @@
 <resources>
   <string name="app_name">Expired Helper</string>
   <string name="empty_view_title_text">"You have no items "</string>
-  <string name="empty_view_subtitle_text">Press add button to add itms</string>
+  <string name="empty_view_subtitle_text">Press add button to add items</string>
   <string name="toolbar_title_expire_helper">Expire Organizer</string>
 
   <string name="supplier_idf" translatable="false">IDF 315</string>
