@@ -3,7 +3,6 @@ package com.samsofa.expiredhelper.ui;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -131,10 +129,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     Item currentItem = adapter.getItemAt(position);
     Intent intent = new Intent(MainActivity.this, AddEditItemActivity.class);
 
-    intent.putExtra("code", currentItem.getCode());
-    intent.putExtra("supplier", currentItem.getSupplier());
-    intent.putExtra("expired_date", currentItem.getExpireDate());
-    intent.putExtra("id", currentItem.getId());
+    intent.putExtra(Constants.EXTRA_ITEM_ID, currentItem.getId());
+    intent.putExtra(Constants.EXTRA_ITEM_CODE, currentItem.getCode());
+    intent.putExtra(Constants.EXTRA_CODE_SUPPLIER, currentItem.getSupplier());
+    intent.putExtra(Constants.EXTRA_CODE_EXPIRE, String.valueOf(currentItem.getExpireDate()));
 
     startActivity(intent);
   }

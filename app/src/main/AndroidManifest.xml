@@ -11,6 +11,7 @@
     android:theme="@style/Theme.ExpiredHelper">
     <activity
       android:name=".ui.AddEditItemActivity"
+      android:parentActivityName=".ui.MainActivity"
       android:theme="@style/Theme.Edit" />
     <activity android:name=".ui.MainActivity">
       <intent-filter>

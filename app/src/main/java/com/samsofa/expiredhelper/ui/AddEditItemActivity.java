@@ -30,12 +30,16 @@ public class AddEditItemActivity extends AppCompatActivity {
   TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
   EditText codeEditText, expireDateEditText;
 
-  String codeString, stringExpire;
+  String codeString, expireCode;
 
   ItemViewModel itemViewModel;
 
   private Spinner mSupplierSpinner;
   private String mSupplier = "unknown supplier";
+
+  private int itemId = -1;
+
+  // private Intent intent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,26 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     viewInit();
     setupSpinner();
+
+    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+
     Intent intent = getIntent();
 
+    if (intent.hasExtra(Constants.EXTRA_ITEM_ID)) {
+      setTitle("Edit Item");
+      codeEditText.setText(intent.getStringExtra(Constants.EXTRA_ITEM_CODE));
+      expireDateEditText.setText(intent.getStringExtra(Constants.EXTRA_CODE_EXPIRE));
+      mSupplier = intent.getStringExtra(Constants.EXTRA_CODE_SUPPLIER);
+      itemId = intent.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
+      addValueToSpinner();
+
+    } else {
+      setTitle("Add Item");
+      // Invalidate the options menu, so the "Delete" menu option can be hidden.
+      // (It doesn't make sense to delete an item that hasn't been created yet.)
+
+      invalidateOptionsMenu();
+    }
 
     itemViewModel = new ViewModelProvider(this,
         AndroidViewModelFactory.getInstance(this.getApplication()))
@@ -56,6 +78,16 @@ public class AddEditItemActivity extends AppCompatActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.save_menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+//    super.onPrepareOptionsMenu(menu);
+    if (itemId == -1) {
+      MenuItem menuItem = menu.findItem(R.id.action_delete);
+      menuItem.setVisible(false);
+    }
     return true;
   }
 
@@ -79,32 +111,36 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private void saveItem() {
 
-    getTextFromEditText();
+    extractValueFromEditText();
+
+    Item newEditItem = new Item(codeString, mSupplier, Long.parseLong(expireCode));
 
     if (validation(codeTextInputLayout, codeString)) {
-      Item newItem = new Item(codeString, mSupplier, Long.parseLong(stringExpire));
-      itemViewModel.insert(newItem);
+      if (itemId != -1) {
+        newEditItem.setId(itemId);
+        itemViewModel.update(newEditItem);
+        Toast.makeText(this, "Item updated", Toast.LENGTH_SHORT).show();
+      } else {
+        itemViewModel.insert(newEditItem);
+        Toast.makeText(this, "Item inserted", Toast.LENGTH_SHORT).show();
+      }
       finish();
-      //todo  AlertDialog to ask would you finish layout or contonui adding more items
     }
+
+    //todo  AlertDialog to ask would you finish layout or contonui adding more items
   }
+
 
   private void delete() {
     Log.i(TAG, "delete: delete");
 
-    getTextFromEditText();
-    if (validation(codeTextInputLayout, codeString)) {
-      Item selectedItem = new Item(codeString, mSupplier, Long.parseLong(stringExpire));
-      itemViewModel.delete(selectedItem);
-      finish();
-    }
 
   }
 
 
-  private void getTextFromEditText() {
+  private void extractValueFromEditText() {
     codeString = codeEditText.getText().toString();
-    stringExpire = expireDateEditText.getText().toString();
+    expireCode = expireDateEditText.getText().toString();
 
   }
 

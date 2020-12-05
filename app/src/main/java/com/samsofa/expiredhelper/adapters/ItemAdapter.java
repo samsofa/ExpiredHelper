@@ -1,6 +1,5 @@
 package com.samsofa.expiredhelper.adapters;
 
-import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,6 @@ import com.samsofa.expiredhelper.models.Item;
 public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
 
-  private RecyclerViewClickListener listener;
-
-  private Context context;
   private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new ItemCallback<Item>() {
     @Override
     public boolean areItemsTheSame(@NonNull Item oldItem, @NonNull Item newItem) {
@@ -37,6 +33,8 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
           oldItem.getExpireDate() == (newItem.getExpireDate());
     }
   };
+  private final RecyclerViewClickListener listener;
+  private final Context context;
 
   public ItemAdapter(RecyclerViewClickListener listener, Context context) {
     super(DIFF_CALLBACK);
@@ -77,6 +75,7 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
     TextView codeNameTextView, codeDateTextView, codeSupplierTextView;
 
     CardView container;
+
     public ItemHolder(@NonNull View itemView) {
       super(itemView);
 
@@ -88,7 +87,10 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
       itemView.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
-          listener.onItemClick(getAdapterPosition());
+          int position = getAdapterPosition();
+          if (listener != null && position != RecyclerView.NO_POSITION) {
+            listener.onItemClick(position);
+          }
         }
       });
 

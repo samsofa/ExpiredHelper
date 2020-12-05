@@ -12,10 +12,9 @@ public class Item {
   private int id;
 
 
-  private final String code;
+  private String code;
 
-
-  private final String supplier;
+  private String supplier;
 
   @ColumnInfo(name = "expire_date")
   private final long expireDate;
