@@ -57,7 +57,7 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
     holder.container
         .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
-    holder.codeNameTextView
+    holder.codeDateTextView
         .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
     holder.codeNameTextView.setText(currentItem.getCode());
     holder.codeSupplierTextView.setText(currentItem.getSupplier());
