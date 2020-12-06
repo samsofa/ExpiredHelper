@@ -7,7 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +31,6 @@ import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator.Builder;
 import java.util.List;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements RecyclerViewClickListener {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
 
   private ItemAdapter adapter;
 
-  Toolbar toolbar;
+
 
   private RecyclerView mRecyclerView;
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     emptyView = findViewById(R.id.empty_view);
@@ -146,21 +147,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.main_menu, menu);
+
     return true;
   }
 
+
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    if (item.getItemId() == R.id.action_delete_all_items) {
-      if (Objects.requireNonNull(itemViewModel.getAllItems().getValue()).size() > 0) {
+    switch (item.getItemId()) {
+      case R.id.action_delete_all_items:
         itemViewModel.deleteAllItems();
         Toast.makeText(this, "all Items deleted", Toast.LENGTH_SHORT).show();
         return true;
-      } else {
-        Toast.makeText(this, "no Items found", Toast.LENGTH_SHORT).show();
-      }
+//      case R.id.action_mode_spinner:
+//        Toast.makeText(this, "work ", Toast.LENGTH_SHORT).show();
+//        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    return super.onOptionsItemSelected(item);
+
   }
 
   private void dealEmptyViewVisibility(List<Item> items) {
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
             itemViewModel.insert(item);
           }
         }).show();
-//    Toast.makeText(this, "id" + item.getId(), Toast.LENGTH_SHORT).show();
+
   }
 
 
