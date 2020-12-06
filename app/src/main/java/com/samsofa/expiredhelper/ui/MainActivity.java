@@ -1,5 +1,7 @@
 package com.samsofa.expiredhelper.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -7,9 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   private RelativeLayout emptyView;
 
   private ItemAdapter adapter;
-
 
 
   private RecyclerView mRecyclerView;
@@ -156,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_delete_all_items:
-        itemViewModel.deleteAllItems();
-        Toast.makeText(this, "all Items deleted", Toast.LENGTH_SHORT).show();
+        showDeleteConfirmationDialog();
+
         return true;
 //      case R.id.action_mode_spinner:
 //        Toast.makeText(this, "work ", Toast.LENGTH_SHORT).show();
@@ -193,4 +192,38 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   }
 
 
+  private void showDeleteConfirmationDialog() {
+
+    // Create an AlertDialog.Builder and set the message, and click listeners
+    // for the positive and negative buttons on the dialog.
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage("Do you want to delete all items? \n\" you will lose all Data\"");
+    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        // User clicked the "Delete" button, so delete the items.
+        deleteAllItems();
+
+      }
+    });
+    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        // User clicked the "Cancel" button, so dismiss the dialog
+        // and continue editing the pet.
+        if (dialog != null) {
+          dialog.dismiss();
+        }
+      }
+    });
+
+    builder.setCancelable(true);
+
+    // Create and show the AlertDialog
+    AlertDialog alertDialog = builder.create();
+    alertDialog.show();
+  }
+
+  private void deleteAllItems() {
+    itemViewModel.deleteAllItems();
+    Toast.makeText(this, "all Items deleted", Toast.LENGTH_SHORT).show();
+  }
 }

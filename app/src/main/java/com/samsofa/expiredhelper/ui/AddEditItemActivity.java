@@ -1,12 +1,17 @@
 package com.samsofa.expiredhelper.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -15,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
 import com.google.android.material.textfield.TextInputLayout;
@@ -39,7 +45,24 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private int itemId = -1;
 
-  // private Intent intent;
+
+  Item selectedItem;
+  /**
+   * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
+   */
+  private boolean mItemHasChange = false;
+
+  /**
+   * OnTouchListener that listens for any user touches on a View, implying that they are modifying
+   * the view, and we change the mItemHasChanged boolean to true.
+   */
+  private View.OnTouchListener mOnTouchListener = new OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+      mItemHasChange = true;
+      return false;
+    }
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +72,17 @@ public class AddEditItemActivity extends AppCompatActivity {
     viewInit();
     setupSpinner();
 
-    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
     Intent intent = getIntent();
 
-    if (intent.hasExtra(Constants.EXTRA_ITEM_ID)) {
+    if (intent.hasExtra("selected_item")) {
       setTitle("Edit Item");
-      codeEditText.setText(intent.getStringExtra(Constants.EXTRA_ITEM_CODE));
-      expireDateEditText.setText(intent.getStringExtra(Constants.EXTRA_CODE_EXPIRE));
-      mSupplier = intent.getStringExtra(Constants.EXTRA_CODE_SUPPLIER);
-      itemId = intent.getIntExtra(Constants.EXTRA_ITEM_ID, -1);
+      selectedItem = intent.getParcelableExtra("selected_item");
+      codeEditText.setText(selectedItem.getCode());
+      expireDateEditText.setText(String.valueOf(selectedItem.getExpireDate()));
+      mSupplier = selectedItem.getSupplier();
+      itemId = selectedItem.getId();
       addValueToSpinner();
 
     } else {
@@ -72,6 +96,8 @@ public class AddEditItemActivity extends AppCompatActivity {
     itemViewModel = new ViewModelProvider(this,
         AndroidViewModelFactory.getInstance(this.getApplication()))
         .get(ItemViewModel.class);
+
+    codeEditText.setOnTouchListener(mOnTouchListener);
 
   }
 
@@ -99,7 +125,27 @@ public class AddEditItemActivity extends AppCompatActivity {
         return true;
 
       case R.id.action_delete:
-        delete();
+        showDeleteConfirmationDialog();
+        return true;
+
+      case android.R.id.home:
+        // if the pet hasn't changed, continue with navigating up to parent activity
+        // which is the {@link CatalogActivity}.
+        if (!mItemHasChange) {
+          NavUtils.navigateUpFromSameTask(AddEditItemActivity.this);
+          return true;
+        }
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that
+        // changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener = new OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            NavUtils.navigateUpFromSameTask(AddEditItemActivity.this);
+          }
+        };
+
+        showUnsavedChangesDialog(discardButtonClickListener);
         return true;
 
       default:
@@ -131,9 +177,10 @@ public class AddEditItemActivity extends AppCompatActivity {
   }
 
 
-  private void delete() {
+  private void deleteItem() {
     Log.i(TAG, "delete: delete");
-
+    itemViewModel.delete(selectedItem);
+    Toast.makeText(this, "delete code: " + selectedItem.getCode(), Toast.LENGTH_SHORT).show();
 
   }
 
@@ -230,4 +277,90 @@ public class AddEditItemActivity extends AppCompatActivity {
         break;
     }
   }
+
+  private void showDeleteConfirmationDialog() {
+
+    // Create an AlertDialog.Builder and set the message, and click listeners
+    // for the positive and negative buttons on the dialog.
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage("Are you sure to delete this item?");
+    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        // User clicked the "Delete" button, so delete the pet.
+        deleteItem();
+        finish();
+      }
+    });
+    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int id) {
+        // User clicked the "Cancel" button, so dismiss the dialog
+        // and continue editing the pet.
+        if (dialog != null) {
+          dialog.dismiss();
+        }
+      }
+    });
+
+    builder.setCancelable(true);
+
+    // Create and show the AlertDialog
+    AlertDialog alertDialog = builder.create();
+    alertDialog.show();
+  }
+
+  /**
+   * Show a dialog that warns the user there are unsaved changes that will be lost if they continue
+   * leaving the editor.
+   *
+   * @param discardButtonClickListener is the click listener for what to do when the user confirms
+   *                                   they want to discard their changes
+   */
+  private void showUnsavedChangesDialog(
+      DialogInterface.OnClickListener discardButtonClickListener) {
+
+    // Create an AlertDialog.Builder and set the message, and click listeners
+    // for the positive and negative buttons on the dialog.
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage("Discard your change and quit editing?");
+    builder.setPositiveButton("Discard", discardButtonClickListener);
+    builder.setNegativeButton("Keep Editing", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        // User clicked the "Keep editing" button, so dismiss the dialog
+        // and continue editing the item
+        if (dialog != null) {
+          dialog.dismiss();
+        }
+      }
+    });
+
+    // Create and show the AlertDialog
+    AlertDialog alertDialog = builder.create();
+    alertDialog.show();
+
+  }
+
+  /**
+   * This method is called when the back button is pressed.
+   */
+  @Override
+  public void onBackPressed() {
+    if (!mItemHasChange) {
+      super.onBackPressed();
+      return;
+    }
+
+    // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+    // Create a click listener to handle the user confirming that changes should be discarded.
+    DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        // User clicked "Discard" button, close the current activity.
+        finish();
+      }
+    };
+
+    showUnsavedChangesDialog(discardButtonClickListener);
+  }
+
 }
