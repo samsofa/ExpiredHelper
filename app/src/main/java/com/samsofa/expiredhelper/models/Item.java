@@ -1,12 +1,15 @@
 package com.samsofa.expiredhelper.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(tableName = "item_table")
-public class Item {
+public class Item implements Parcelable {
 
   @PrimaryKey(autoGenerate = true)
   private int id;
@@ -24,6 +27,38 @@ public class Item {
     this.code = code;
     this.supplier = supplier;
     this.expireDate = expireDate;
+  }
+
+  public static final Creator<Item> CREATOR = new Creator<Item>() {
+    @Override
+    public Item createFromParcel(Parcel in) {
+      return new Item(in);
+    }
+
+    @Override
+    public Item[] newArray(int size) {
+      return new Item[size];
+    }
+  };
+
+  protected Item(Parcel in) {
+    id = in.readInt();
+    code = in.readString();
+    supplier = in.readString();
+    expireDate = in.readLong();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(code);
+    dest.writeString(supplier);
+    dest.writeLong(expireDate);
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
   }
 
   public int getId() {

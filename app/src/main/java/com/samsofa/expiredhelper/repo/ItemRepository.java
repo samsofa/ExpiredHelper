@@ -7,12 +7,13 @@ import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.room.ItemDao;
 import com.samsofa.expiredhelper.room.ItemDatabase;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ItemRepository {
 
-  private ItemDao itemDao;
+  private final ItemDao itemDao;
 
-  private LiveData<List<Item>> allItems;
+  private final LiveData<List<Item>> allItems;
 
 
   public ItemRepository(Application application) {
@@ -37,7 +38,7 @@ public class ItemRepository {
 
   public void delete(Item item) {
 
-   new DeleteNoteAsyncTask(itemDao).execute(item);
+    new DeleteNoteAsyncTask(itemDao).execute(item);
   }
 
   public void deleteAll() {
@@ -53,7 +54,7 @@ public class ItemRepository {
 
   private static class InsertNoteAsyncTask extends AsyncTask<Item, Void, Void> {
 
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
 
     private InsertNoteAsyncTask(ItemDao itemDao) {
       this.itemDao = itemDao;
@@ -68,7 +69,7 @@ public class ItemRepository {
 
   private static class UpdateNoteAsyncTask extends AsyncTask<Item, Void, Void> {
 
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
 
     private UpdateNoteAsyncTask(ItemDao itemDao) {
       this.itemDao = itemDao;
@@ -83,7 +84,7 @@ public class ItemRepository {
 
   private static class DeleteNoteAsyncTask extends AsyncTask<Item, Void, Void> {
 
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
 
     private DeleteNoteAsyncTask(ItemDao itemDao) {
       this.itemDao = itemDao;
@@ -98,7 +99,7 @@ public class ItemRepository {
 
   private static class DeleteAllNoteAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
 
 
     private DeleteAllNoteAsyncTask(ItemDao itemDao) {
@@ -112,5 +113,6 @@ public class ItemRepository {
       return null;
     }
   }
+
 
 }

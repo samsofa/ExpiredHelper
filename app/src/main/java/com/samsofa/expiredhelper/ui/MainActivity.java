@@ -16,16 +16,18 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.adapters.ItemAdapter;
 import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator.Builder;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
       }
     });
 
-    new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    new ItemTouchHelper(new SimpleCallback(0, ItemTouchHelper.LEFT) {
 
       @Override
       public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder,
@@ -95,13 +97,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
       public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
           @NonNull ViewHolder viewHolder, float dX, float dY, int actionState,
           boolean isCurrentlyActive) {
-        new RecyclerViewSwipeDecorator.Builder(c, mRecyclerView, viewHolder, dX, dY, actionState,
+        new Builder(c, mRecyclerView, viewHolder, dX, dY, actionState,
             isCurrentlyActive)
             .addBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.gray))
             .addActionIcon(R.drawable.ic_delete)
             .addSwipeLeftLabel("Delete")
-            .setSwipeLeftLabelColor(R.color.red)
-            .setSwipeLeftActionIconTint(R.color.red)
+
             //
             //.setSwipeLeftLabelTypeface()
             //      .setSwipeLeftLabelTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f)
@@ -113,11 +114,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
 
       @Override
       public void onSwiped(@NonNull ViewHolder viewHolder, int direction) {
+
+        Item deletedItem = adapter.getItemAt(viewHolder.getAdapterPosition());
         if (direction == ItemTouchHelper.LEFT) {
-          itemViewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
-          Toast.makeText(MainActivity.this,
-              "item at position deleted: " + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT)
-              .show();
+
+          itemViewModel.delete(deletedItem);
+
+          createUndoDeleteItemSnackBar(deletedItem);
         }
       }
     }).attachToRecyclerView(mRecyclerView);
@@ -129,10 +132,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     Item currentItem = adapter.getItemAt(position);
     Intent intent = new Intent(MainActivity.this, AddEditItemActivity.class);
 
-    intent.putExtra(Constants.EXTRA_ITEM_ID, currentItem.getId());
-    intent.putExtra(Constants.EXTRA_ITEM_CODE, currentItem.getCode());
-    intent.putExtra(Constants.EXTRA_CODE_SUPPLIER, currentItem.getSupplier());
-    intent.putExtra(Constants.EXTRA_CODE_EXPIRE, String.valueOf(currentItem.getExpireDate()));
+//    intent.putExtra(Constants.EXTRA_ITEM_ID, currentItem.getId());
+//    intent.putExtra(Constants.EXTRA_ITEM_CODE, currentItem.getCode());
+//    intent.putExtra(Constants.EXTRA_CODE_SUPPLIER, currentItem.getSupplier());
+//    intent.putExtra(Constants.EXTRA_CODE_EXPIRE, String.valueOf(currentItem.getExpireDate()));
+
+    intent.putExtra("selected_item", currentItem);
 
     startActivity(intent);
   }
@@ -166,6 +171,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
       mRecyclerView.setVisibility(View.GONE);
       emptyView.setVisibility(View.VISIBLE);
     }
+  }
+
+
+  private void createUndoDeleteItemSnackBar(Item item) {
+    Snackbar.make(mRecyclerView,
+        "you want to delete Code " + item.getCode(),
+        Snackbar.LENGTH_LONG)
+        .setAction("Undo", new OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            itemViewModel.insert(item);
+          }
+        }).show();
+//    Toast.makeText(this, "id" + item.getId(), Toast.LENGTH_SHORT).show();
   }
 
 
