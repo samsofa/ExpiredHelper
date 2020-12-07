@@ -1,9 +1,12 @@
 package com.samsofa.expiredhelper.ui;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,6 +30,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
+import java.util.Calendar;
 
 
 public class AddEditItemActivity extends AppCompatActivity {
@@ -361,6 +365,21 @@ public class AddEditItemActivity extends AppCompatActivity {
     };
 
     showUnsavedChangesDialog(discardButtonClickListener);
+  }
+
+
+  private void displayDatePicker() {
+    Calendar calendar = Calendar.getInstance();
+    int year = calendar.get(Calendar.YEAR);
+    int month = calendar.get(Calendar.MONTH);
+    int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+//    DatePickerDialog dialog = new DatePickerDialog(AddEditItemActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth
+//
+//        year, month, day);
+
+//    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+//    dialog.show();
   }
 
 }
