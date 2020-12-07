@@ -199,11 +199,11 @@ public class AddEditItemActivity extends AppCompatActivity {
     //EditText
     codeEditText = findViewById(R.id.et_code_name);
     mSupplierSpinner = findViewById(R.id.spinner_supplier);
-    expireDateEditText = findViewById(R.id.et_expire);
+   // expireDateEditText = findViewById(R.id.et_expire);
     //textInputLayout
     codeTextInputLayout = findViewById(R.id.code_textInputLayout);
     supplierTextInputLayout = findViewById(R.id.supplier_textInputLayout);
-    expireTextInputLayout = findViewById(R.id.expire_textInputLayout);
+    //  expireTextInputLayout = findViewById(R.id.expire_textInputLayout);
 
   }
 

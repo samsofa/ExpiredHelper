@@ -13,6 +13,7 @@
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="@+id/guideline"
     app:layout_constraintTop_toTopOf="parent">
@@ -40,24 +41,6 @@
     app:layout_constraintStart_toStartOf="@+id/guideline"
     app:layout_constraintTop_toBottomOf="@+id/code_textInputLayout" />
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/expire_textInputLayout"
-    android:layout_width="250dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="32dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="@+id/guideline"
-    app:layout_constraintTop_toBottomOf="@+id/spinner_supplier">
-
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/et_expire"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@drawable/round_corner"
-      android:hint="expire date"
-      android:maxLines="1" />
-  </com.google.android.material.textfield.TextInputLayout>
 
 
   <androidx.constraintlayout.widget.Guideline
@@ -73,7 +56,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
     android:text="Code"
-    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    android:fontFamily="@font/lobster"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
     app:layout_constraintBottom_toBottomOf="@+id/code_textInputLayout"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
@@ -82,9 +66,10 @@
     android:id="@+id/textView4"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="64dp"
+    android:layout_marginTop="80dp"
+    android:fontFamily="@font/lobster"
     android:text="Supplier"
-    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
     app:layout_constraintBottom_toBottomOf="@+id/supplier_textInputLayout"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -94,9 +79,10 @@
     android:id="@+id/textView5"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="64dp"
-    android:text="Date"
-    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    android:layout_marginTop="85dp"
+    android:fontFamily="@font/lobster"
+    android:text="Expire Date"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -107,5 +93,31 @@
     app:barrierDirection="left"
     app:constraint_referenced_ids="textView,textView4,textView5"
     tools:layout_editor_absoluteX="395dp" />
+
+  <ImageView
+    android:id="@+id/calendar_imgv"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_marginTop="105dp"
+    android:layout_marginEnd="16dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/spinner_supplier"
+    app:srcCompat="@drawable/ic_calendar"
+    tools:ignore="VectorDrawableCompat" />
+
+  <TextView
+    android:id="@+id/expire_date_txv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="70dp"
+    android:inputType="date"
+    android:text="07-12-2020"
+    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+    android:textSize="24dp"
+    app:layout_constraintEnd_toStartOf="@+id/calendar_imgv"
+    app:layout_constraintHorizontal_bias="0.075"
+    app:layout_constraintStart_toStartOf="@+id/guideline"
+    app:layout_constraintTop_toBottomOf="@+id/spinner_supplier" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
