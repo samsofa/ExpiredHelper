@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
     switch (item.getItemId()) {
       case R.id.action_delete_all_items:
         if (itemViewModel.getAllItems().getValue().size() > 1) {
-          showDeleteConfirmationDialog();
+          showAllDeleteConfirmationDialog();
           return true;
         }
 
@@ -193,12 +193,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   }
 
 
-  private void showDeleteConfirmationDialog() {
+  private void showAllDeleteConfirmationDialog() {
 
     // Create an AlertDialog.Builder and set the message, and click listeners
     // for the positive and negative buttons on the dialog.
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage("Do you want to delete all items? \n\" you will lose all Data\"");
+    //to add icon you have to add title for alert dialog
+    builder.setTitle("Be careful");
+    builder.setIcon(R.drawable.ic_alert);
     builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int id) {
         // User clicked the "Delete" button, so delete the items.

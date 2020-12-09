@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
@@ -61,16 +62,18 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
     holder.container
         .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
-    holder.codeDateTextView
+    holder.codeDaysTextView
         .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
     holder.codeNameTextView.setText(currentItem.getCode());
     holder.codeSupplierTextView.setText(currentItem.getSupplier());
-    holder.codeDateTextView
+    holder.codeDaysTextView
         .setText(String.valueOf(extractDayFromMilli(currentItem.getExpireDate())));
+
+    holder.expireDateTextView.setText(getFormattedDate(currentItem.getExpireDate()));
 
     // Set the proper background color on the month circle.
     // Fetch the background from the TextView, which is a GradientDrawable.
-    GradientDrawable expireDateCircle = (GradientDrawable) holder.codeDateTextView.getBackground();
+    GradientDrawable expireDateCircle = (GradientDrawable) holder.codeDaysTextView.getBackground();
 
     // Get the appropriate background color based on the current expired day
 
@@ -125,9 +128,16 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
     return ContextCompat.getColor(context, dayColorResourceId);
   }
 
+  private String getFormattedDate(long dateInMillisec) {
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+
+    return simpleDateFormat.format(dateInMillisec);
+  }
+
   public class ItemHolder extends RecyclerView.ViewHolder {
 
-    TextView codeNameTextView, codeDateTextView, codeSupplierTextView;
+    TextView codeNameTextView, codeDaysTextView, codeSupplierTextView, expireDateTextView;
 
     CardView container;
 
@@ -136,8 +146,9 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
       container = itemView.findViewById(R.id.container);
       codeNameTextView = itemView.findViewById(R.id.txv_item_name);
-      codeDateTextView = itemView.findViewById(R.id.txv_item_date);
+      codeDaysTextView = itemView.findViewById(R.id.txv_days_to_expire);
       codeSupplierTextView = itemView.findViewById(R.id.txv_item_supplier);
+      expireDateTextView = itemView.findViewById(R.id.txv_expire_date);
 
       itemView.setOnClickListener(new OnClickListener() {
         @Override

@@ -28,16 +28,16 @@
       android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView
-      android:id="@+id/txv_item_date"
+      android:id="@+id/txv_days_to_expire"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
       android:background="@drawable/expire_date_background"
       android:gravity="center"
-      android:text="25"
       android:maxLines="1"
-      android:textColor="@color/white"
-      android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+      android:text="25"
+      android:textAppearance="@style/TextAppearance.AppCompat.Large"
+      android:textColor="@color/white" />
 
     <TextView
       android:id="@+id/txv_item_supplier"
@@ -45,7 +45,19 @@
       android:layout_height="wrap_content"
       android:layout_below="@id/txv_item_name"
       android:text="idf"
-      android:textAllCaps="true" />
+      android:textAllCaps="true"
+      android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+    <TextView
+      android:id="@+id/txv_expire_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/txv_item_name"
+      android:layout_centerHorizontal="true"
+      android:layout_marginStart="57dp"
+      android:layout_marginTop="0dp"
+      android:text="21/02/2020"
+      android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
   </RelativeLayout>
 </androidx.cardview.widget.CardView>
