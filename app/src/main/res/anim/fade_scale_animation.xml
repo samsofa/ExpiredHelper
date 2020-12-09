@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
   <alpha
-    android:duration="700"
+    android:duration="900"
     android:fromAlpha="0.0"
     android:toAlpha="1.0" />
-  <scale
-    android:duration="900"
-    android:fillBefore="false"
-    android:fromXScale="0.0"
-    android:fromYScale="0.0"
-    android:toXScale="1.10"
-    android:toYScale="1.10" />
+  <!--  <scale-->
+  <!--    android:duration="900"-->
+  <!--    android:fillBefore="false"-->
+  <!--    android:fromXScale="1.2"-->
+  <!--    android:fromYScale="1.2"-->
+  <!--    android:toXScale="1"-->
+  <!--    android:toYScale="1" />-->
+
+  <translate
+    android:duration="1000"
+    android:fromXDelta="100%"
+    android:toXDelta="0%" />
 
 </set>

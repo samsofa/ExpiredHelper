@@ -1,6 +1,7 @@
 package com.samsofa.expiredhelper.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -9,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.interfaces.RecyclerViewClickListener;
 import com.samsofa.expiredhelper.models.Item;
+import java.util.Calendar;
 
 public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
@@ -35,6 +38,7 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
   };
   private final RecyclerViewClickListener listener;
   private final Context context;
+
 
   public ItemAdapter(RecyclerViewClickListener listener, Context context) {
     super(DIFF_CALLBACK);
@@ -61,13 +65,64 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
         .setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
     holder.codeNameTextView.setText(currentItem.getCode());
     holder.codeSupplierTextView.setText(currentItem.getSupplier());
-    holder.codeDateTextView.setText(String.valueOf(currentItem.getExpireDate()));
+    holder.codeDateTextView
+        .setText(String.valueOf(extractDayFromMilli(currentItem.getExpireDate())));
 
+    // Set the proper background color on the month circle.
+    // Fetch the background from the TextView, which is a GradientDrawable.
+    GradientDrawable expireDateCircle = (GradientDrawable) holder.codeDateTextView.getBackground();
+
+    // Get the appropriate background color based on the current expired day
+
+    int dayColor = getExpireDayColor(extractDayFromMilli(currentItem.getExpireDate()));
+    // Set the color on the day circle
+    expireDateCircle.setColor(dayColor);
 
   }
 
   public Item getItemAt(int position) {
     return getItem(position);
+  }
+
+  private int extractDayFromMilli(long expiredDate) {
+    long expirePeriodInDay = 0;
+
+    if (expiredDate != 0) {
+      Calendar cal = Calendar.getInstance();
+      long currentDate = cal.getTimeInMillis();
+
+      long expiredDateLong = Long.valueOf(expiredDate);
+      long expiredPeriod = expiredDateLong - currentDate;
+
+      expirePeriodInDay =
+          expiredPeriod / (1000 * 60 * 60 * 24); //remain period after extract month (%)
+    } else {
+      expirePeriodInDay = 0L;
+    }
+    //return (int) (remainPeriod / (1000 * 60 * 60 * 24)); //millisecond in the day
+    return (int) expirePeriodInDay;
+  }
+
+  private int getExpireDayColor(int day) {
+
+    int dayColorResourceId;
+
+    int cognitiveDay = day / 30;
+    switch (cognitiveDay) {
+      case 0:
+        dayColorResourceId = R.color.day5;
+        break;
+      case 1:
+        dayColorResourceId = R.color.day15;
+        break;
+      case 2:
+        dayColorResourceId = R.color.day30;
+        break;
+      default:
+        dayColorResourceId = R.color.day60plus;
+        break;
+    }
+    return ContextCompat.getColor(context, dayColorResourceId);
   }
 
   public class ItemHolder extends RecyclerView.ViewHolder {
@@ -93,6 +148,7 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
           }
         }
       });
+
 
     }
   }

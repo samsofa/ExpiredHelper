@@ -2,6 +2,7 @@ package com.samsofa.expiredhelper.ui;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -18,7 +20,9 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -30,6 +34,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -37,11 +42,13 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private static final String TAG = "AddEditItemActivity";
 
-  TextInputLayout codeTextInputLayout, supplierTextInputLayout, expireTextInputLayout;
+  TextInputLayout codeTextInputLayout, expireDateInputLayout;
   EditText codeEditText, expireDateEditText;
+  ImageView calendarImage;
+
 
   String codeString, expireCode;
-
+  long expireDateMilliSec;
   ItemViewModel itemViewModel;
 
   private Spinner mSupplierSpinner;
@@ -49,6 +56,7 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private int itemId = -1;
 
+  private DatePickerDialog.OnDateSetListener mOnDateSetListener;
 
   Item selectedItem;
   /**
@@ -68,9 +76,12 @@ public class AddEditItemActivity extends AppCompatActivity {
     }
   };
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
     setContentView(R.layout.activity_add_edit_item);
 
     viewInit();
@@ -84,7 +95,11 @@ public class AddEditItemActivity extends AppCompatActivity {
       setTitle("Edit Item");
       selectedItem = intent.getParcelableExtra("selected_item");
       codeEditText.setText(selectedItem.getCode());
-      expireDateEditText.setText(String.valueOf(selectedItem.getExpireDate()));
+      expireDateMilliSec = selectedItem.getExpireDate();
+
+      expireDateEditText.setText(getFormattedDate(expireDateMilliSec));
+//      Toast.makeText(this, "formatedDate: " + itemViewModel.getFormattedDate(expireDateMilliSec), Toast.LENGTH_SHORT).show();
+
       mSupplier = selectedItem.getSupplier();
       itemId = selectedItem.getId();
       addValueToSpinner();
@@ -102,6 +117,27 @@ public class AddEditItemActivity extends AppCompatActivity {
         .get(ItemViewModel.class);
 
     codeEditText.setOnTouchListener(mOnTouchListener);
+    expireDateEditText.setOnTouchListener(mOnTouchListener);
+
+    expireDateEditText.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        displayDatePicker();
+      }
+    });
+
+    mOnDateSetListener = new OnDateSetListener() {
+      @Override
+      public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, dayOfMonth);
+
+        expireDateMilliSec = cal.getTimeInMillis();
+
+        expireDateEditText.setText(getFormattedDate(expireDateMilliSec));
+      }
+    };
+
 
   }
 
@@ -163,7 +199,7 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     extractValueFromEditText();
 
-    Item newEditItem = new Item(codeString, mSupplier, Long.parseLong(expireCode));
+    Item newEditItem = new Item(codeString, mSupplier, expireDateMilliSec);
 
     if (validation(codeTextInputLayout, codeString)) {
       if (itemId != -1) {
@@ -191,19 +227,20 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private void extractValueFromEditText() {
     codeString = codeEditText.getText().toString();
-    expireCode = expireDateEditText.getText().toString();
+    // expireCode = expireDateEditText.getText().toString();
 
   }
 
   private void viewInit() {
     //EditText
     codeEditText = findViewById(R.id.et_code_name);
+    expireDateEditText = findViewById(R.id.et_expire_date);
     mSupplierSpinner = findViewById(R.id.spinner_supplier);
-   // expireDateEditText = findViewById(R.id.et_expire);
-    //textInputLayout
-    codeTextInputLayout = findViewById(R.id.code_textInputLayout);
-    supplierTextInputLayout = findViewById(R.id.supplier_textInputLayout);
-    //  expireTextInputLayout = findViewById(R.id.expire_textInputLayout);
+
+    calendarImage = findViewById(R.id.imgv_calendar);
+    expireDateInputLayout = findViewById(R.id.til_expire_date);
+    codeTextInputLayout = findViewById(R.id.til_code);
+
 
   }
 
@@ -369,17 +406,30 @@ public class AddEditItemActivity extends AppCompatActivity {
 
 
   private void displayDatePicker() {
+
     Calendar calendar = Calendar.getInstance();
+
     int year = calendar.get(Calendar.YEAR);
     int month = calendar.get(Calendar.MONTH);
     int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-//    DatePickerDialog dialog = new DatePickerDialog(AddEditItemActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth
-//
-//        year, month, day);
+    DatePickerDialog dialog = new DatePickerDialog(AddEditItemActivity.this,
+        android.R.style.Theme_Holo_Light_Dialog_MinWidth
+        , mOnDateSetListener,
+        year, month, day);
 
-//    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
-//    dialog.show();
+    //select date for future time not past time
+    dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+    dialog.getWindow().setGravity(Gravity.BOTTOM);
+    dialog.show();
   }
 
+
+  private String getFormattedDate(long dateInMillisec) {
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+
+    return simpleDateFormat.format(dateInMillisec);
+  }
 }

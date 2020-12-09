@@ -10,4 +10,19 @@
   <color name="red">#c80000</color>
   <color name="gray">#dcdcdc</color>
   <color name="canary">#ff9100</color>
+
+
+  <!--expire date circle color-->
+  <color name="day60plus">#8BC34A</color>
+
+
+  <color name="day60">#f06292</color>
+
+
+  <color name="day30">#d81b60</color>
+
+
+  <color name="day15">#ad1457</color>
+
+  <color name="day5">#560027</color>
 </resources>

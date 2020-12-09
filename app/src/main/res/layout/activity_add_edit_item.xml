@@ -9,7 +9,7 @@
 
 
   <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/code_textInputLayout"
+    android:id="@+id/til_code"
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -39,8 +39,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.043"
     app:layout_constraintStart_toStartOf="@+id/guideline"
-    app:layout_constraintTop_toBottomOf="@+id/code_textInputLayout" />
-
+    app:layout_constraintTop_toBottomOf="@+id/til_code" />
 
 
   <androidx.constraintlayout.widget.Guideline
@@ -55,10 +54,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
-    android:text="Code"
     android:fontFamily="@font/lobster"
+    android:text="Code"
     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-    app:layout_constraintBottom_toBottomOf="@+id/code_textInputLayout"
+    app:layout_constraintBottom_toBottomOf="@+id/til_code"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,30 +93,36 @@
     app:constraint_referenced_ids="textView,textView4,textView5"
     tools:layout_editor_absoluteX="395dp" />
 
-  <ImageView
-    android:id="@+id/calendar_imgv"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_marginTop="105dp"
-    android:layout_marginEnd="16dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/spinner_supplier"
-    app:srcCompat="@drawable/ic_calendar"
-    tools:ignore="VectorDrawableCompat" />
 
-  <TextView
-    android:id="@+id/expire_date_txv"
-    android:layout_width="wrap_content"
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/til_expire_date"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="70dp"
-    android:inputType="date"
-    android:text="07-12-2020"
-    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-    android:textSize="24dp"
-    app:layout_constraintEnd_toStartOf="@+id/calendar_imgv"
-    app:layout_constraintHorizontal_bias="0.075"
+    android:layout_marginTop="50dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.772"
     app:layout_constraintStart_toStartOf="@+id/guideline"
-    app:layout_constraintTop_toBottomOf="@+id/spinner_supplier" />
+    app:layout_constraintTop_toBottomOf="@+id/spinner_supplier">
 
+    <EditText
+      android:id="@+id/et_expire_date"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@drawable/round_corner"
+      android:focusableInTouchMode="false"
+      android:hint="expire"
+      android:inputType="date"
+      android:maxLines="1" />
+
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <ImageView
+    android:id="@+id/imgv_calendar"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+
+    app:layout_constraintBottom_toBottomOf="@+id/til_expire_date"
+    app:layout_constraintEnd_toEndOf="@+id/til_expire_date"
+    app:layout_constraintTop_toTopOf="@+id/til_expire_date"
+    app:srcCompat="@drawable/ic_calendar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

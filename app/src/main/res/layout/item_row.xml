@@ -9,7 +9,7 @@
   android:layout_marginTop="4dp"
   android:layout_marginEnd="4dp"
   app:cardCornerRadius="10dp"
-  android:outlineAmbientShadowColor="@color/teal_200"
+
   app:cardElevation="7dp"
   tools:targetApi="p">
 
@@ -32,8 +32,11 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
+      android:background="@drawable/expire_date_background"
+      android:gravity="center"
+      android:text="25"
       android:maxLines="1"
-      android:text="20-11-2020"
+      android:textColor="@color/white"
       android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView

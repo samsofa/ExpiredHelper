@@ -155,12 +155,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_delete_all_items:
-        showDeleteConfirmationDialog();
+        if (itemViewModel.getAllItems().getValue().size() > 1) {
+          showDeleteConfirmationDialog();
+          return true;
+        }
 
-        return true;
-//      case R.id.action_mode_spinner:
-//        Toast.makeText(this, "work ", Toast.LENGTH_SHORT).show();
-//        return true;
+        Toast.makeText(this, "no items to delete", Toast.LENGTH_SHORT).show();
+
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewClick
   }
 
   private void deleteAllItems() {
+
     itemViewModel.deleteAllItems();
     Toast.makeText(this, "all Items deleted", Toast.LENGTH_SHORT).show();
   }

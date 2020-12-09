@@ -20,7 +20,7 @@ public class Item implements Parcelable {
   private String supplier;
 
   @ColumnInfo(name = "expire_date")
-  private final long expireDate;
+  private long expireDate;
 
 
   public Item(String code, String supplier, long expireDate) {
