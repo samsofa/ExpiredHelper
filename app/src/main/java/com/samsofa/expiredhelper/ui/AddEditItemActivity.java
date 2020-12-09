@@ -1,5 +1,7 @@
 package com.samsofa.expiredhelper.ui;
 
+import static android.text.InputType.TYPE_NULL;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -47,7 +49,7 @@ public class AddEditItemActivity extends AppCompatActivity {
   ImageView calendarImage;
 
 
-  String codeString, expireCode;
+  String codeString;
   long expireDateMilliSec;
   ItemViewModel itemViewModel;
 
@@ -203,9 +205,13 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     if (validation(codeTextInputLayout, codeString)) {
       if (itemId != -1) {
-        newEditItem.setId(itemId);
-        itemViewModel.update(newEditItem);
-        Toast.makeText(this, "Item updated", Toast.LENGTH_SHORT).show();
+
+        if (mItemHasChange) {
+          newEditItem.setId(itemId);
+          itemViewModel.update(newEditItem);
+          Toast.makeText(this, "Item updated", Toast.LENGTH_SHORT).show();
+        }
+
       } else {
         itemViewModel.insert(newEditItem);
         Toast.makeText(this, "Item inserted", Toast.LENGTH_SHORT).show();
