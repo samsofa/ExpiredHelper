@@ -130,7 +130,7 @@ public class ItemAdapter extends ListAdapter<Item, ItemAdapter.ItemHolder> {
 
   private String getFormattedDate(long dateInMillisec) {
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMM/yyyy");
 
     return simpleDateFormat.format(dateInMillisec);
   }

@@ -20,7 +20,12 @@
 
   <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
     <item name="android:src">@drawable/ic_more</item>
-
   </style>
+
+  <!--  for popup menu color and text color-->
+  <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+    <item name="android:textColor">@color/purple_500</item>
+  </style>
+
 
 </resources>

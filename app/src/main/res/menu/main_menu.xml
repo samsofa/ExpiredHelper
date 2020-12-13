@@ -7,5 +7,4 @@
     android:orderInCategory="1"
     android:title="delete All Items"
     app:showAsAction="never|collapseActionView" />
-
 </menu>

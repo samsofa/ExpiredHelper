@@ -1,7 +1,5 @@
 package com.samsofa.expiredhelper.ui;
 
-import static android.text.InputType.TYPE_NULL;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -38,6 +36,7 @@ import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 public class AddEditItemActivity extends AppCompatActivity {
@@ -434,7 +433,7 @@ public class AddEditItemActivity extends AppCompatActivity {
 
   private String getFormattedDate(long dateInMillisec) {
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMM/yyyy");
 
     return simpleDateFormat.format(dateInMillisec);
   }
