@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -34,9 +36,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.samsofa.expiredhelper.R;
 import com.samsofa.expiredhelper.models.Item;
 import com.samsofa.expiredhelper.viewModels.ItemViewModel;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 public class AddEditItemActivity extends AppCompatActivity {
@@ -92,27 +97,6 @@ public class AddEditItemActivity extends AppCompatActivity {
 
     Intent intent = getIntent();
 
-    if (intent.hasExtra("selected_item")) {
-      setTitle("Edit Item");
-      selectedItem = intent.getParcelableExtra("selected_item");
-      codeEditText.setText(selectedItem.getCode());
-      expireDateMilliSec = selectedItem.getExpireDate();
-
-      expireDateEditText.setText(getFormattedDate(expireDateMilliSec));
-//      Toast.makeText(this, "formatedDate: " + itemViewModel.getFormattedDate(expireDateMilliSec), Toast.LENGTH_SHORT).show();
-
-      mSupplier = selectedItem.getSupplier();
-      itemId = selectedItem.getId();
-      addValueToSpinner();
-
-    } else {
-      setTitle("Add Item");
-      // Invalidate the options menu, so the "Delete" menu option can be hidden.
-      // (It doesn't make sense to delete an item that hasn't been created yet.)
-
-      invalidateOptionsMenu();
-    }
-
     itemViewModel = new ViewModelProvider(this,
         AndroidViewModelFactory.getInstance(this.getApplication()))
         .get(ItemViewModel.class);
@@ -138,7 +122,67 @@ public class AddEditItemActivity extends AppCompatActivity {
         expireDateEditText.setText(getFormattedDate(expireDateMilliSec));
       }
     };
+    if (intent.hasExtra("selected_item")) {
+      setTitle("Edit Item");
+      selectedItem = intent.getParcelableExtra("selected_item");
+      codeEditText.setText(selectedItem.getCode());
+      expireDateMilliSec = selectedItem.getExpireDate();
 
+      expireDateEditText.setText(getFormattedDate(expireDateMilliSec));
+//      Toast.makeText(this, "formatedDate: " + itemViewModel.getFormattedDate(expireDateMilliSec), Toast.LENGTH_SHORT).show();
+
+      mSupplier = selectedItem.getSupplier();
+      itemId = selectedItem.getId();
+      addValueToSpinner();
+
+    } else {
+      setTitle("Add Item");
+      // Invalidate the options menu, so the "Delete" menu option can be hidden.
+      // (It doesn't make sense to delete an item that hasn't been created yet.)
+
+      invalidateOptionsMenu();
+//      Observable.create(new ObservableOnSubscribe<Object>() {
+//        @Override
+//        public void subscribe(
+//            @io.reactivex.rxjava3.annotations.NonNull ObservableEmitter<Object> emitter)
+//            throws Throwable {
+//          codeEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//              emitter.onNext(s);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//
+//
+//            }
+//          });
+//        }
+//      })  .doOnNext(c -> Log.d(TAG, "onCreate: " + c ))
+//          .debounce(3, TimeUnit.SECONDS)
+//          .subscribe(s -> Log.d(TAG, "onCreate: " + s));
+//
+    }
+
+
+  }
+
+  private void viewInit() {
+    //EditText
+    codeEditText = findViewById(R.id.et_code_name);
+    expireDateEditText = findViewById(R.id.et_expire_date);
+    mSupplierSpinner = findViewById(R.id.spinner_supplier);
+
+    calendarImage = findViewById(R.id.imgv_calendar);
+    expireDateInputLayout = findViewById(R.id.til_expire_date);
+    codeTextInputLayout = findViewById(R.id.til_code);
 
   }
 
@@ -233,19 +277,6 @@ public class AddEditItemActivity extends AppCompatActivity {
   private void extractValueFromEditText() {
     codeString = codeEditText.getText().toString();
     // expireCode = expireDateEditText.getText().toString();
-
-  }
-
-  private void viewInit() {
-    //EditText
-    codeEditText = findViewById(R.id.et_code_name);
-    expireDateEditText = findViewById(R.id.et_expire_date);
-    mSupplierSpinner = findViewById(R.id.spinner_supplier);
-
-    calendarImage = findViewById(R.id.imgv_calendar);
-    expireDateInputLayout = findViewById(R.id.til_expire_date);
-    codeTextInputLayout = findViewById(R.id.til_code);
-
 
   }
 

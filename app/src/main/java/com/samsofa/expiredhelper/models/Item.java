@@ -13,7 +13,6 @@ public class Item implements Parcelable {
   @PrimaryKey(autoGenerate = true)
   private int id;
 
-
   private String code;
 
   private String supplier;
